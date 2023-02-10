@@ -1,5 +1,10 @@
 import "./App.css";
-import init, { greet, greet_json, build_greeting } from "wasm-game-of-life";
+import init, {
+  greet,
+  greet_json,
+  build_greeting,
+  day3,
+} from "wasm-game-of-life";
 import { useEffect, useState } from "react";
 
 const TEXT_AREA_NAME = "input_box";
@@ -12,7 +17,7 @@ const DAYS = {
 };
 
 const DAY_FUNC_MAP = {
-  [DAYS.day3]: greet,
+  [DAYS.day3]: day3,
 };
 
 function App() {
@@ -34,9 +39,14 @@ function App() {
     // Read the form data
     const data = Object.fromEntries(new FormData(e.target));
     console.log(data);
-    const value = data[TEXT_AREA_NAME];
+    const day = data[SELECT_NAME];
+    const inputText = data[TEXT_AREA_NAME];
 
-    console.log(greet(value));
+    const ans = DAY_FUNC_MAP[day](inputText);
+
+    setAnswer(ans);
+
+    // console.log(greet(ans));
   }
 
   return (

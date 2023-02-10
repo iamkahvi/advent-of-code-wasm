@@ -1,3 +1,4 @@
+mod day3;
 mod utils;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -43,4 +44,9 @@ pub fn build_greeting(name: &str) -> JsValue {
     };
 
     serde_wasm_bindgen::to_value(&g).unwrap()
+}
+
+#[wasm_bindgen]
+pub fn day3(input_str: &str) -> usize {
+    day3::day3_compute(input_str.to_string())
 }

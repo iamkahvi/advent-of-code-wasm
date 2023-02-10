@@ -46,7 +46,25 @@ pub fn build_greeting(name: &str) -> JsValue {
     serde_wasm_bindgen::to_value(&g).unwrap()
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+
+struct Ans {
+    pt1: Option<usize>,
+    pt2: Option<usize>,
+}
+
 #[wasm_bindgen]
-pub fn day3(input_str: &str) -> usize {
-    day3::day3_compute(input_str.to_string())
+pub fn day3(input_str: &str) -> JsValue {
+    let a = match (day3::pt1(input_str), day3::pt2(input_str)) {
+        (Ok(ans1), Ok(ans2)) => Ans {
+            pt1: Some(ans1),
+            pt2: Some(ans2),
+        },
+        _ => Ans {
+            pt1: None,
+            pt2: None,
+        },
+    };
+
+    serde_wasm_bindgen::to_value(&a).unwrap()
 }

@@ -9,7 +9,7 @@ struct Rucksack {
 
 #[derive(Debug)]
 
-struct Er(&'static str);
+pub struct Er(&'static str);
 
 #[derive(Debug, PartialEq, Clone, Copy, Eq, Hash)]
 struct Item(u8);
@@ -35,13 +35,17 @@ impl Item {
     }
 }
 
-pub fn day3_compute(input: String) -> usize {
+pub fn pt1(input: &str) -> Result<usize, Er> {
     let lines = input
         .split('\n')
         .filter(|l| !l.is_empty())
         .collect::<Vec<&str>>();
 
-    let sacks = parse_lines(&lines).unwrap();
+    if lines.len() <= 1 {
+        return Err(Er("nope"));
+    };
+
+    let sacks = parse_lines(&lines)?;
 
     let matches: Vec<Item> = sacks
         .iter()
@@ -55,14 +59,24 @@ pub fn day3_compute(input: String) -> usize {
         })
         .collect();
 
-    let match_vals: Vec<usize> = matches.iter().map(|i| i.score()).collect();
+    let ans = matches.iter().map(|i| dbg!(i.score())).sum();
 
-    dbg!(match_vals);
+    Ok(ans)
+}
 
-    let ans = part_2(&lines).unwrap();
-    dbg!(ans);
+pub fn pt2(input: &str) -> Result<usize, Er> {
+    let lines = input
+        .split('\n')
+        .filter(|l| !l.is_empty())
+        .collect::<Vec<&str>>();
 
-    ans
+    if lines.len() <= 1 {
+        return Err(Er("nope"));
+    };
+
+    let ans = part_2(&lines)?;
+
+    Ok(ans)
 }
 
 fn parse_lines(lines: &[&str]) -> Result<Vec<Rucksack>, Er> {

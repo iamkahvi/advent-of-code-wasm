@@ -1,10 +1,5 @@
 import "./App.css";
-import init, {
-  greet,
-  greet_json,
-  build_greeting,
-  day3,
-} from "wasm-game-of-life";
+import init, { day3 } from "wasm-game-of-life";
 import { useEffect, useState } from "react";
 
 const TEXT_AREA_NAME = "input_box";
@@ -31,12 +26,10 @@ function App() {
   }, []);
 
   function handleSubmit(e) {
-    // Prevent the browser from reloading the page
     e.preventDefault();
 
     if (isLoading) return;
 
-    // Read the form data
     const data = Object.fromEntries(new FormData(e.target));
     console.log(data);
     const day = data[SELECT_NAME];
@@ -44,10 +37,26 @@ function App() {
 
     const ans = DAY_FUNC_MAP[day](inputText);
 
-    setAnswer(ans);
+    console.log(ans);
 
-    // console.log(greet(ans));
+    setAnswer(ans);
   }
+
+  const answerMarkup = (() => {
+    if (!answer) {
+      return <p>no answer</p>;
+    }
+
+    if (answer["pt1"] && answer["pt2"]) {
+      return (
+        <h2>
+          ANSWER - a: {answer.pt1}, b: {answer.pt2}
+        </h2>
+      );
+    }
+
+    return <p>invalid input</p>;
+  })();
 
   return (
     <div className="App">
@@ -56,7 +65,9 @@ function App() {
           <h2>day:</h2>
           <select name={SELECT_NAME}>
             {Object.entries(DAYS).map(([key, val]) => (
-              <option value={key}>{val}</option>
+              <option key={key} value={key}>
+                {val}
+              </option>
             ))}
           </select>
 
@@ -68,10 +79,10 @@ function App() {
             defaultValue="input here"
           />
           <br></br>
-          <button type="reset">Reset edits</button>
-          <button type="submit">Save post</button>
+          <button type="reset">reset</button>
+          <button type="submit">calculate</button>
         </form>
-        {answer ? <h2>ANSWER: {answer}</h2> : <p>no answer</p>}
+        {answerMarkup}
       </div>
     </div>
   );

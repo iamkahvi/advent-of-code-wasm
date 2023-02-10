@@ -29,16 +29,11 @@ struct Greeting {
 pub fn greet_json(json: &str) {
     let res: Result<Greeting, _> = serde_json::from_str(json);
 
-    let json_obj = if let Ok(obj) = res {
-        obj
-    } else {
-        Greeting {
-            name: "sample".to_string(),
-        }
+    let name = match res {
+        Ok(o) => o.name,
+        _ => "sample".to_string(),
     };
 
-    let name = json_obj.name;
-
-    let greeting_str = format!("Hello from json, {}!", name);
+    let greeting_str = format!("Hello from greet_json, {}!", name);
     alert(&greeting_str);
 }

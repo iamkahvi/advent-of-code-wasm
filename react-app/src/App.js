@@ -3,10 +3,21 @@ import init, { greet, greet_json, build_greeting } from "wasm-game-of-life";
 import { useEffect, useState } from "react";
 
 const TEXT_AREA_NAME = "input_box";
+const SELECT_NAME = "select_box";
+
+const DAYS = {
+  day3: "day3",
+  day4: "day4",
+  day5: "day5",
+};
+
+const DAY_FUNC_MAP = {
+  [DAYS.day3]: greet,
+};
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [name, setName] = useState("");
+  const [answer, setAnswer] = useState(null);
 
   useEffect(() => {
     init().then(() => {
@@ -14,43 +25,35 @@ function App() {
     });
   }, []);
 
-  function handleGreet(name) {
-    if (isLoading) return;
-
-    // greet(name);
-    // greet_json(JSON.stringify({ name }));
-    console.log(build_greeting(name));
-  }
-
   function handleSubmit(e) {
     // Prevent the browser from reloading the page
     e.preventDefault();
 
+    if (isLoading) return;
+
     // Read the form data
     const data = Object.fromEntries(new FormData(e.target));
+    console.log(data);
     const value = data[TEXT_AREA_NAME];
 
-    // Or you can work with it as a plain object:
     console.log(greet(value));
   }
 
   return (
     <div className="App">
-      <input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        type="text"
-      />
-      <button onClick={() => handleGreet(name)}>Greet</button>
-      <br></br>
-      <br></br>
-      <br></br>
       <div>
-        <h1>day 4</h1>
         <form method="post" onSubmit={handleSubmit}>
+          <h2>day:</h2>
+          <select name={SELECT_NAME}>
+            {Object.entries(DAYS).map(([key, val]) => (
+              <option value={key}>{val}</option>
+            ))}
+          </select>
+
+          <h2>input.txt:</h2>
           <textarea
             name={TEXT_AREA_NAME}
-            rows="40"
+            rows="30"
             cols="50"
             defaultValue="input here"
           />
@@ -58,6 +61,7 @@ function App() {
           <button type="reset">Reset edits</button>
           <button type="submit">Save post</button>
         </form>
+        {answer ? <h2>ANSWER: {answer}</h2> : <p>no answer</p>}
       </div>
     </div>
   );

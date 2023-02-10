@@ -14,14 +14,13 @@ extern "C" {
 }
 
 #[wasm_bindgen]
-pub fn greet(name: &str) {
-    let greeting_str = format!("Hello, {}!", name);
-    alert(&greeting_str);
+pub fn greet(name: &str) -> String {
+    format!("Hello, {}!", name)
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Greeting {
-    name: String,
+    pub name: String,
 }
 
 #[wasm_bindgen]
@@ -35,4 +34,13 @@ pub fn greet_json(json: &str) {
 
     let greeting_str = format!("Hello from greet_json, {}!", name);
     alert(&greeting_str);
+}
+
+#[wasm_bindgen]
+pub fn build_greeting(name: &str) -> JsValue {
+    let g = Greeting {
+        name: name.to_string(),
+    };
+
+    serde_wasm_bindgen::to_value(&g).unwrap()
 }

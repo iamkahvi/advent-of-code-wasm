@@ -1,5 +1,5 @@
 import "./App.css";
-import init, { greet, greet_json } from "wasm-game-of-life";
+import init, { greet, greet_json, build_greeting } from "wasm-game-of-life";
 import { useEffect, useState } from "react";
 
 const TEXT_AREA_NAME = "input_box";
@@ -18,7 +18,8 @@ function App() {
     if (isLoading) return;
 
     // greet(name);
-    greet_json(JSON.stringify({ name }));
+    // greet_json(JSON.stringify({ name }));
+    console.log(build_greeting(name));
   }
 
   function handleSubmit(e) {
@@ -30,7 +31,7 @@ function App() {
     const value = data[TEXT_AREA_NAME];
 
     // Or you can work with it as a plain object:
-    console.log(value);
+    console.log(greet(value));
   }
 
   return (

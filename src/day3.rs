@@ -26,11 +26,11 @@ impl std::convert::TryFrom<u8> for Item {
 }
 
 impl Item {
-    fn score(self) -> usize {
+    fn score(self) -> Result<usize, String> {
         match self {
-            Item(b'a'..=b'z') => 1 + (self.0 - b'a') as usize,
-            Item(b'A'..=b'Z') => 27 + (self.0 - b'A') as usize,
-            _ => unreachable!(),
+            Item(b'a'..=b'z') => Ok(1 + (self.0 - b'a') as usize),
+            Item(b'A'..=b'Z') => Ok(27 + (self.0 - b'A') as usize),
+            _ => Err("nope".to_string()),
         }
     }
 }
@@ -59,7 +59,7 @@ pub fn pt1(input: &str) -> Result<usize, Er> {
         })
         .collect();
 
-    let ans = matches.iter().map(|i| dbg!(i.score())).sum();
+    let ans = matches.iter().flat_map(|i| dbg!(i.score())).sum();
 
     Ok(ans)
 }
@@ -131,7 +131,7 @@ fn part_2(lines: &[&str]) -> Result<usize, Er> {
         })
         .collect();
 
-    let ans = matches.iter().map(|i| dbg!(i.score())).sum();
+    let ans = matches.iter().flat_map(|i| dbg!(i.score())).sum();
 
     Ok(ans)
 }

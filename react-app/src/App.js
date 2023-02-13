@@ -1,5 +1,5 @@
 import "./App.css";
-import init, { day3 } from "wasm-game-of-life";
+import init, { day3, day4 } from "wasm-game-of-life";
 import { useEffect, useState } from "react";
 
 const TEXT_AREA_NAME = "input_box";
@@ -13,6 +13,7 @@ const DAYS = {
 
 const DAY_FUNC_MAP = {
   [DAYS.day3]: day3,
+  [DAYS.day4]: day4,
 };
 
 function App() {

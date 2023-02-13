@@ -19,6 +19,8 @@ const DAY_FUNC_MAP = {
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [answer, setAnswer] = useState(null);
+  const [textArea, setTextArea] = useState("");
+  const [placeholder, setPlaceholder] = useState("day3 input here");
 
   useEffect(() => {
     init().then(() => {
@@ -48,23 +50,30 @@ function App() {
       return <p>no answer</p>;
     }
 
-    if (answer["pt1"] && answer["pt2"]) {
-      return (
-        <h2>
-          ANSWER - a: {answer.pt1}, b: {answer.pt2}
-        </h2>
-      );
+    if (answer["pt1"] === undefined || answer["pt2"] === undefined) {
+      return <p>invalid input</p>;
     }
 
-    return <p>invalid input</p>;
+    return (
+      <h2>
+        ANSWER - a: {answer.pt1}, b: {answer.pt2}
+      </h2>
+    );
   })();
+
+  function handleDayChange(e) {
+    const day = e.target.value;
+
+    setTextArea("");
+    setPlaceholder(`${day} input here`);
+  }
 
   return (
     <div className="App">
       <div>
         <form method="post" onSubmit={handleSubmit}>
           <h2>day:</h2>
-          <select name={SELECT_NAME}>
+          <select name={SELECT_NAME} onChange={handleDayChange}>
             {Object.entries(DAYS).map(([key, val]) => (
               <option key={key} value={key}>
                 {val}
@@ -75,9 +84,11 @@ function App() {
           <h2>input.txt:</h2>
           <textarea
             name={TEXT_AREA_NAME}
+            onChange={(e) => setTextArea(e.target.value)}
+            value={textArea}
+            placeholder={placeholder}
             rows="30"
             cols="50"
-            defaultValue="input here"
           />
           <br></br>
           <button type="reset">reset</button>

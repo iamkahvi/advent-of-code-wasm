@@ -1,5 +1,6 @@
 mod day3;
 mod day4;
+mod day6;
 mod utils;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
@@ -73,6 +74,22 @@ pub fn day3(input_str: &str) -> JsValue {
 #[wasm_bindgen]
 pub fn day4(input_str: &str) -> JsValue {
     let a = match (day4::pt1(input_str), day4::pt2(input_str)) {
+        (Ok(ans1), Ok(ans2)) => Ans {
+            pt1: Some(ans1),
+            pt2: Some(ans2),
+        },
+        _ => Ans {
+            pt1: None,
+            pt2: None,
+        },
+    };
+
+    serde_wasm_bindgen::to_value(&a).unwrap()
+}
+
+#[wasm_bindgen]
+pub fn day6(input_str: &str) -> JsValue {
+    let a = match (day6::pt1(input_str), day6::pt2(input_str)) {
         (Ok(ans1), Ok(ans2)) => Ans {
             pt1: Some(ans1),
             pt2: Some(ans2),

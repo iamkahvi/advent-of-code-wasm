@@ -1,5 +1,5 @@
 import "./App.css";
-import init, { day3, day4, day6 } from "wasm-game-of-life";
+import init, { day3, day4, day6, console_log } from "wasm-game-of-life";
 import { useEffect, useState } from "react";
 
 const TEXT_AREA_NAME = "input_box";
@@ -21,12 +21,23 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [answer, setAnswer] = useState(null);
   const [textArea, setTextArea] = useState("");
-  const [placeholder, setPlaceholder] = useState("day3 input here");
+  const [selectedDay, setSelectedDay] = useState(DAYS.day3);
+
+  if (!isLoading) {
+    console_log("HELLO RUST");
+  }
 
   useEffect(() => {
     init().then(() => {
       setIsLoading(false);
     });
+
+    const day = window.location.pathname.match("/(.*)")[1];
+
+    if (day !== "") {
+      console.log(day);
+      setSelectedDay(day);
+    }
   }, []);
 
   function handleSubmit(e) {
@@ -36,10 +47,10 @@ function App() {
 
     const data = Object.fromEntries(new FormData(e.target));
     console.log(data);
-    const day = data[SELECT_NAME];
+    // const day = data[SELECT_NAME];
     const inputText = data[TEXT_AREA_NAME];
 
-    const ans = DAY_FUNC_MAP[day](inputText);
+    const ans = DAY_FUNC_MAP[selectedDay](inputText);
 
     console.log(ans);
 
@@ -65,8 +76,8 @@ function App() {
   function handleDayChange(e) {
     const day = e.target.value;
 
+    setSelectedDay(day);
     setTextArea("");
-    setPlaceholder(`${day} input here`);
   }
 
   return (
@@ -74,7 +85,11 @@ function App() {
       <div>
         <form method="post" onSubmit={handleSubmit}>
           <h2>day:</h2>
-          <select name={SELECT_NAME} onChange={handleDayChange}>
+          <select
+            name={SELECT_NAME}
+            onChange={handleDayChange}
+            value={selectedDay}
+          >
             {Object.entries(DAYS).map(([key, val]) => (
               <option key={key} value={key}>
                 {val}
@@ -87,7 +102,7 @@ function App() {
             name={TEXT_AREA_NAME}
             onChange={(e) => setTextArea(e.target.value)}
             value={textArea}
-            placeholder={placeholder}
+            placeholder={`${selectedDay} input here`}
             rows="30"
             cols="50"
           />

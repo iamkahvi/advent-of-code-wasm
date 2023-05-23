@@ -5,3 +5,9 @@ Goal is to pass the [advent of code](https://github.com/iamkahvi/advent-of-code-
 Derived from [wasm-pack-template](https://github.com/rustwasm/wasm-pack-template) and [create-react-app](https://reactjs.org/docs/create-a-new-react-app.html#create-react-app).
 
 ![website screenshot](./assets/website.png)
+
+## usage
+
+React App: `cd react-app && npm run start`
+
+Compile WASM: `wasm-pack build --target web`

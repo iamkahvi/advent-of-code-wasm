@@ -1,6 +1,8 @@
 use itertools::Itertools;
 use std::collections::HashSet;
 
+use crate::log;
+
 #[derive(Debug)]
 struct Rucksack {
     first: Vec<Item>,
@@ -36,6 +38,8 @@ impl Item {
 }
 
 pub fn pt1(input: &str) -> Result<usize, Er> {
+    log("Hello from rust!");
+
     let lines = input
         .split('\n')
         .filter(|l| !l.is_empty())
